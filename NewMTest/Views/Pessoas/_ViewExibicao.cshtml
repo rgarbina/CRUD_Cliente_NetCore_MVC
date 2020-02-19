@@ -1,0 +1,57 @@
+﻿@model NewMTest.Models.PessoaViewModel
+
+<hr />
+<dl class="row">
+    <dd class="col-sm-2">
+        @Html.DisplayName(Model.Ativado == true ? "Ativo" : "Inativo")
+    </dd>
+</dl>
+
+<dl class="row">
+    <dt class="col-sm-1">
+        @Html.DisplayNameFor(model => model.Nome)
+    </dt>
+    <dd class="col-sm-4">
+        @Html.DisplayFor(model => model.Nome)
+    </dd>
+    <dt class="col-sm-1">
+        @Html.DisplayNameFor(model => model.DataNascimento)
+    </dt>
+    <dd class="col-sm-2">
+        @Html.DisplayFor(model => model.DataNascimento)
+    </dd>
+</dl>
+<dl class="row">
+    <dt class="col-sm-1">
+        @Html.DisplayNameFor(model => model.Email)
+    </dt>
+    <dd class="col-sm-4">
+        @Html.DisplayFor(model => model.Email)
+    </dd>
+    <dt class="col-sm-1">
+        @Html.DisplayNameFor(model => model.Celular)
+    </dt>
+    <dd class="col-sm-2">
+        @Html.DisplayFor(model => model.Celular)
+    </dd>
+    <dt class="col-sm-1">
+        @Html.DisplayNameFor(model => model.Cpf)
+    </dt>
+    <dd class="col-sm-2">
+        @Html.DisplayFor(model => model.Cpf)
+    </dd>
+</dl>
+<dl class="row">
+    <dt class="col-sm-1">
+        @Html.DisplayNameFor(model => model.Endereco)
+    </dt>
+    <dd class="col-sm-11">
+        @Html.DisplayFor(model => model.Endereco)
+    </dd>
+    <dt class="col-sm-1">
+        @Html.DisplayNameFor(model => model.Observacao)
+    </dt>
+    <dd class="col-sm-11">
+        @Html.DisplayFor(model => model.Observacao)
+    </dd>
+</dl>

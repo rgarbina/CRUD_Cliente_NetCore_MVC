@@ -1,0 +1,149 @@
+﻿@model PaginatedList<NewMTest.Models.PessoaViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<style>
+    .container {
+        max-width: 1800px;
+    }
+
+    thead, tbody {
+        display: block;
+    }
+
+    tbody {
+        overflow-y: scroll;
+        height: 350px;
+    }
+
+        tbody td:nth-child(4n) {
+            min-width: 140px;
+        }
+
+        tbody td:nth-child(6n) {
+            min-width: 250px;
+            max-width: 550px;
+            word-wrap: break-word
+        }
+
+        tbody td:nth-child(7n) {
+            max-width: 550px;
+            word-wrap: break-word
+        }
+
+        tbody td:nth-child(8n) {
+            min-width: 250px;
+        }
+</style>
+
+<p>
+    <a asp-action="Edit" class="btn btn-success">Adicionar Pessoa</a>
+</p>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Pesquisa por Nome ou E-Mail: <input type="search" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Pesquisar" class="btn btn-primary" /> |
+            <a asp-action="Index" class="btn btn-light">Recarregar Lista</a>
+        </p>
+    </div>
+</form>
+<br />
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NomeSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Nome</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DataSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Data Nascimento</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["CpfSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">CPF</a>
+            </th>
+            <th>
+                Celular
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["EmailSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">E-Mail</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["EnderecoSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Endereço</a>
+            </th>
+            <th>
+                Observação
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataNascimento)
+                </td>
+                <td class="cpf">
+                    @Html.DisplayFor(modelItem => item.Cpf)
+                </td>
+                <td class="telefone">
+                    @Html.DisplayFor(modelItem => item.Celular)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Endereco)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Observacao)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.PessoaId" class="btn btn-success">Editar</a> |
+                    <a asp-action="Details" asp-route-id="@item.PessoaId" class="btn btn-secondary">Detalhes</a> |
+                    <a asp-action="Delete" asp-route-id="@item.PessoaId" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+<br />
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-primary @prevDisabled">
+    Anterior
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-primary @nextDisabled">
+    Proximo
+</a>
+
+@section Scripts {
+    <script src="~/lib/jquery.maskedinput/jquery.maskedinput.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".cpf").mask('999.999.999-99');
+        });
+    </script>
+}

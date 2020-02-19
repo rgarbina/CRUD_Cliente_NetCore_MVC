@@ -1,0 +1,18 @@
+﻿@model NewMTest.Models.PessoaViewModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Remover Pessoa</h1>
+
+<h3>Deseja remover este item ?</h3>
+<div>
+    @Html.Partial("~/Views/Pessoas/_ViewExibicao.cshtml", Model)
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="PessoaId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-light">Voltar para Lista</a>
+    </form>
+</div>

@@ -1,0 +1,15 @@
+﻿@model NewMTest.Models.PessoaViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Detalhe Pessoa</h1>
+
+<div>
+    @Html.Partial("~/Views/Pessoas/_ViewExibicao.cshtml", Model)
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.PessoaId" class="btn btn-success">Editar</a> |
+    <a asp-action="Index" class="btn btn-light">Voltar para Lista</a>
+</div>

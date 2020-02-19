@@ -1,0 +1,119 @@
+﻿@model NewMTest.Models.PessoaViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@if (Model.PessoaId > 0)
+{
+    <h1>Editar</h1>
+}
+else
+{
+    <h1>Adicionar</h1>
+}
+
+<h4>Pessoa</h4>
+<hr />
+
+<form asp-action="Edit">
+    <div class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="PessoaId" />
+        @if (Model.PessoaId != 0)
+        {
+            <div class="form-group form-check col-md-12">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Ativado" /> @Html.DisplayNameFor(model => model.Ativado)
+                </label>
+            </div>
+        }
+        <div class="form-group col-md-6">
+            <label asp-for="Nome" class="control-label"></label>
+            <input asp-for="Nome" class="form-control" />
+            <span asp-validation-for="Nome" class="text-danger" pattern="/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\s]+$/"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="Email" class="control-label"></label>
+            <input asp-for="Email" class="form-control" type="email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="DataNascimento" class="control-label"></label>
+            <input asp-for="DataNascimento" class="form-control" type="date" />
+            <span asp-validation-for="DataNascimento" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="Cpf" class="control-label"></label>
+            <input asp-for="Cpf" class="form-control cpf" />
+            <span asp-validation-for="Cpf" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="Celular" class="control-label"></label>
+            <input asp-for="Celular" class="form-control telefone" type="tel" pattern="\([0-9]{2}\)[\s][0-9]{4}-[0-9]{4,5}" />
+            <span asp-validation-for="Celular" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-12">
+            <label asp-for="Endereco" class="control-label"></label>
+            <input asp-for="Endereco" class="form-control" />
+            <span asp-validation-for="Endereco" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-12">
+            <label asp-for="Observacao" class="control-label"></label>
+            <textarea asp-for="Observacao" class="form-control" maxlength="300" rows="5" cols="40"> </textarea>
+            <span asp-validation-for="Observacao" class="text-danger"></span>
+            <div id="charNum"></div>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-success" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index" class="btn btn-light">Voltar para Lista</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/jquery.maskedinput/jquery.maskedinput.js"></script>
+    <script>
+        var textAreaMax = 300;
+        function countChar(val) {
+            var len = val.value.length;
+            if (len >= textAreaMax) {
+                val.value = val.value.substring(0, textAreaMax);
+            } else {
+                $('#charNum').text(textAreaMax - len);
+            }
+        };
+
+        $(document).ready(function () {
+            $(".cpf").mask('999.999.999-99');
+            //jQuery(".telefone").mask('(00) 0000-00009');
+            $(".telefone")
+                .mask("(99) 9999-9999?9")
+                .focusout(function (event) {
+                    var target, phone, element;
+                    target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+                    phone = target.value.replace(/\D/g, '');
+                    element = $(target);
+                    element.unmask();
+                    if (phone.length > 10) {
+                        element.mask("(99) 99999-999?9");
+                    } else {
+                        element.mask("(99) 9999-9999?9");
+                    }
+                });
+
+            $("#Observacao").keyup(function () {
+                countChar(this);
+            })
+
+            $('input#Nome').on('keypress', function (e) {
+                var t = String.fromCharCode(e.which).match(/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\s]+$/) !== null;
+                return t;
+            });
+        });
+    </script>
+}
