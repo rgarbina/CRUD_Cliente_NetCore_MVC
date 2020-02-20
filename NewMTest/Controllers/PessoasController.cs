@@ -24,69 +24,14 @@ namespace NewMTest.Controllers
         // GET: Pessoas
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
-            ViewData["CurrentSort"] = sortOrder;
-            ViewData["NomeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "nome_desc" : "";
-            ViewData["DataSortParm"] = sortOrder == "Data" ? "data_desc" : "Data";
-            ViewData["CpfSortParm"] = sortOrder == "CPF" ? "cpf_desc" : "CPF";
-            ViewData["EmailSortParm"] = sortOrder == "Email" ? "email_desc" : "Email";
-            ViewData["EnderecoSortParm"] = sortOrder == "Endereco" ? "endereco_desc" : "Endereco";
+            return View();
+        }
 
-            if (searchString != null)
-            {
-                pageNumber = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-
-            ViewData["CurrentFilter"] = searchString;
-
-            var query = _pessoaService.GetPessoasQuery();
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                query = query.Where(s => s.Nome.ToLower().Contains(searchString.ToLower())
-                                       || s.Email.ToLower().Contains(searchString.ToLower()));
-            }
-
-            switch (sortOrder)
-            {
-                case "nome_desc":
-                    query = query.OrderByDescending(s => s.Nome);
-                    break;
-                case "Data":
-                    query = query.OrderBy(s => s.DataNascimento);
-                    break;
-                case "data_desc":
-                    query = query.OrderByDescending(s => s.DataNascimento);
-                    break;
-                case "CPF":
-                    query = query.OrderBy(s => s.Cpf);
-                    break;
-                case "cpf_desc":
-                    query = query.OrderByDescending(s => s.Cpf);
-                    break;
-                case "Email":
-                    query = query.OrderBy(s => s.Email);
-                    break;
-                case "email_desc":
-                    query = query.OrderByDescending(s => s.Email);
-                    break;
-                case "Endereco":
-                    query = query.OrderBy(s => s.Endereco);
-                    break;
-                case "endereco_desc":
-                    query = query.OrderByDescending(s => s.Endereco);
-                    break;
-                default:
-                    query = query.OrderBy(s => s.Nome);
-                    break;
-            }
-
-            var quer = query.ToListModel();
-            var pagedList = await PaginatedList<PessoaViewModel>.CreateAsync(quer, pageNumber ?? 1);
-            return View(pagedList);
+        [HttpPost]
+        public async Task<IActionResult> Pesquisa(string sortOrder, string currentFilter, string searchString, int? pageNumber)
+        {
+            var retorno = (await _pessoaService.GetPessoasQuery().ToListAsync()).ToListModel();
+            return Json(retorno);
         }
 
         // GET: Pessoas/Details/5
@@ -230,6 +175,72 @@ namespace NewMTest.Controllers
             }
 
             return Json(true);
+        }
+
+        private async Task<PaginatedList<PessoaViewModel>> Pesquisar(string sortOrder, string currentFilter, string searchString, int? pageNumber)
+        {
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NomeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "nome_desc" : "";
+            ViewData["DataSortParm"] = sortOrder == "Data" ? "data_desc" : "Data";
+            ViewData["CpfSortParm"] = sortOrder == "CPF" ? "cpf_desc" : "CPF";
+            ViewData["EmailSortParm"] = sortOrder == "Email" ? "email_desc" : "Email";
+            ViewData["EnderecoSortParm"] = sortOrder == "Endereco" ? "endereco_desc" : "Endereco";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var query = _pessoaService.GetPessoasQuery();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(s => s.Nome.ToLower().Contains(searchString.ToLower())
+                                       || s.Email.ToLower().Contains(searchString.ToLower()));
+            }
+
+            switch (sortOrder)
+            {
+                case "nome_desc":
+                    query = query.OrderByDescending(s => s.Nome);
+                    break;
+                case "Data":
+                    query = query.OrderBy(s => s.DataNascimento);
+                    break;
+                case "data_desc":
+                    query = query.OrderByDescending(s => s.DataNascimento);
+                    break;
+                case "CPF":
+                    query = query.OrderBy(s => s.Cpf);
+                    break;
+                case "cpf_desc":
+                    query = query.OrderByDescending(s => s.Cpf);
+                    break;
+                case "Email":
+                    query = query.OrderBy(s => s.Email);
+                    break;
+                case "email_desc":
+                    query = query.OrderByDescending(s => s.Email);
+                    break;
+                case "Endereco":
+                    query = query.OrderBy(s => s.Endereco);
+                    break;
+                case "endereco_desc":
+                    query = query.OrderByDescending(s => s.Endereco);
+                    break;
+                default:
+                    query = query.OrderBy(s => s.Nome);
+                    break;
+            }
+
+            var quer = query.ToListModel();
+            return await PaginatedList<PessoaViewModel>.CreateAsync(quer, pageNumber ?? 1);
         }
     }
 }

@@ -30,7 +30,6 @@ namespace NewMTest.Models
         [Display(Name = "Endereço")]
         public string Endereco { get; set; }
 
-        [MaxLength(300)]
         [StringLength(300, ErrorMessage = "Observação não pode conter mais do que 300 caracteres.")]
         [Display(Name = "Observação")]
         public string Observacao { get; set; }
