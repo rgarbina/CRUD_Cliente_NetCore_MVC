@@ -168,6 +168,7 @@ namespace NewMTest.Controllers
         public IActionResult VerificaCPF(string cpf)
         {
             cpf = cpf.Replace("_", " ");
+            //validar 87520953041
             var valido = CpfCnpjUtils.IsValid(cpf);
             if (!valido)
             {
